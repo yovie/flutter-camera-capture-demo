@@ -91,6 +91,21 @@ class _MyHomePageState extends State<MyHomePage> {
         super.dispose();
     }
 
+    Widget buildCameraPreview(CameraController cameraController) {
+        final double previewAspectRatio = 0.7;
+        return AspectRatio(
+            aspectRatio: 1 / previewAspectRatio,
+            child: ClipRect(
+                child: Transform.scale(
+                    scale: cameraController.value.aspectRatio / previewAspectRatio,
+                    child: Center(
+                        child: CameraPreview(cameraController),
+                    ),
+                ),
+            ),
+        );
+    }
+
     @override
     Widget build(BuildContext context) {
         return Scaffold(
@@ -101,7 +116,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 future: _initializeControllerFuture,
                 builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.done) {
-                        return CameraPreview(_controller);
+                        // return CameraPreview(_controller);
+                        return buildCameraPreview(_controller);
                     } else {
                         return const Center(child: CircularProgressIndicator());
                     }
